@@ -1,0 +1,36 @@
+---
+name: Functional Tests
+
+on:
+  push:
+    branches:
+      - 'main'
+      - 'fix-*'
+      - 'feature-*'
+
+env:
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+
+jobs:
+  functional_tests:
+    name: Run script
+    timeout-minutes: 5
+    strategy:
+      matrix:
+        os: ['ubuntu-latest', 'macos-latest']
+        version: ['1.7.0', '1.7.1', '1.7.2', '1.7.3', '2.0.0', '2.1.0']
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+      - name: Compile
+        run: yarn install
+      - name: Build
+        run: yarn run build
+      - name: Install Enry
+        uses: ./
+        with:
+          version: ${{ matrix.version }}
+      - name: Run CLI
+        run: enry --json
