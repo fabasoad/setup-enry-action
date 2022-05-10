@@ -9,6 +9,6 @@ describe('UrlProvider', () => {
       build: (): string => fileName
     })
     const actual: string = provider.getUrl()
-    expect(actual).toBe(`${CLI_URL}/${version}/${fileName}.${CLI_EXTENSION}`)
+    expect(actual).toBe(`${CLI_URL}/v${version}/${fileName}.${CLI_EXTENSION}`)
   })
 })

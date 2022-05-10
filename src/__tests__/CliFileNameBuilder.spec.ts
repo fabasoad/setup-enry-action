@@ -27,7 +27,8 @@ describe('CliFileNameBuilder', () => {
     items, (item: IFixture) => {
       (type as jest.Mock).mockImplementation(() => item.os1)
       const b: CliFileNameBuilder = new CliFileNameBuilder(expectedVersion)
-      expect(b.build()).toBe(`${TOOL_NAME}-${item.os2}-${expectedVersion}`)
+      expect(b.build()).toBe(
+        `${TOOL_NAME}_v${expectedVersion}_${item.os2}_amd64`)
     })
 
   afterEach(() => (type as jest.Mock).mockClear())
