@@ -1,0 +1,21 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true,
+    "fixAll.eslint": true,
+    "source.organizeImports": true,
+    "typescript.suggestionActions.enabled": true
+  },
+  "cSpell.words": [
+    "Autobuild",
+    "UNSECURE",
+    "codeql",
+    "ibiqlik",
+    "markdownlint",
+    "nosborn",
+    "semver",
+    "simbo",
+    "vercel",
+    "yamllint"
+  ],
+  "editor.rulers": [ 80 ]
+}

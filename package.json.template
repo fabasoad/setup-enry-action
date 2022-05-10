@@ -1,0 +1,56 @@
+{
+  "name": "${REPO_NAME}",
+  "version": "1.0.0",
+  "description": "${REPO_TITLE} GitHub Action",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:${REPO_OWNER}/${REPO_NAME}.git"
+  },
+  "scripts": {
+    "build": "ncc build -m src/index.ts",
+    "lint:md": "markdownlint --config .markdownlint.yml '**/*.md'",
+    "lint:es": "eslint --ext ts src",
+    "lint": "${PM_CLI} run lint:md && ${PM_CLI} run lint:es",
+    "postinstall": "${PM_CLI} husky install",
+    "prepare": "${PM_CLI} run snyk-protect",
+    "security:auth": "snyk auth",
+    "security:test": "snyk test",
+    "snyk-protect": "snyk protect",
+    "test": "jest --config=jest.config.json --coverage"
+  },
+  "keywords": [
+    "actions",
+    "github-actions"
+  ],
+  "author": "${REPO_OWNER_DISPLAY_NAME}",
+  "license": "MIT",
+  "homepage": "https://github.com/${REPO_OWNER}/${REPO_NAME}#readme",
+  "dependencies": {
+    "@actions/core": "1.2.6",
+    "@actions/tool-cache": "1.6.1",
+    "glob": "7.1.6",
+    "winston": "3.3.3"
+  },
+  "devDependencies": {
+    "@types/chai": "4.2.15",
+    "@types/jest": "26.0.20",
+    "@types/node": "14.14.31",
+    "@typescript-eslint/eslint-plugin": "4.15.2",
+    "@typescript-eslint/parser": "4.15.2",
+    "@vercel/ncc": "0.27.0",
+    "chai": "4.3.0",
+    "eslint": "7.20.0",
+    "eslint-config-google": "0.14.0",
+    "git-branch-is": "4.0.0",
+    "husky": "5.1.1",
+    "jest": "26.6.3",
+    "jest-circus": "26.6.3",
+    "markdownlint-cli": "0.26.0",
+    "mocha-param": "2.0.1",
+    "snyk": "1.461.0",
+    "ts-jest": "26.5.2",
+    "typescript": "4.2.2"
+  },
+  "snyk": true
+}
