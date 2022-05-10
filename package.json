@@ -1,19 +1,19 @@
 {
-  "name": "${REPO_NAME}",
+  "name": "setup-enry-action",
   "version": "1.0.0",
-  "description": "${REPO_TITLE} GitHub Action",
+  "description": "Setup Enry GitHub Action",
   "main": "dist/index.js",
   "repository": {
     "type": "git",
-    "url": "git@github.com:${REPO_OWNER}/${REPO_NAME}.git"
+    "url": "git@github.com:fabasoad/setup-enry-action.git"
   },
   "scripts": {
     "build": "ncc build -m src/index.ts",
     "lint:md": "markdownlint --config .markdownlint.yml '**/*.md'",
     "lint:es": "eslint --ext ts src",
-    "lint": "${PM_CLI} run lint:md && ${PM_CLI} run lint:es",
-    "postinstall": "${PM_CLI} husky install",
-    "prepare": "${PM_CLI} run snyk-protect",
+    "lint": "yarn run lint:md && yarn run lint:es",
+    "postinstall": "yarn husky install",
+    "prepare": "yarn run snyk-protect",
     "security:auth": "snyk auth",
     "security:test": "snyk test",
     "snyk-protect": "snyk protect",
@@ -23,9 +23,9 @@
     "actions",
     "github-actions"
   ],
-  "author": "${REPO_OWNER_DISPLAY_NAME}",
+  "author": "Yevhen Fabizhevskyi",
   "license": "MIT",
-  "homepage": "https://github.com/${REPO_OWNER}/${REPO_NAME}#readme",
+  "homepage": "https://github.com/fabasoad/setup-enry-action#readme",
   "dependencies": {
     "@actions/core": "1.2.6",
     "@actions/tool-cache": "1.6.1",
@@ -38,7 +38,7 @@
     "@types/node": "14.14.31",
     "@typescript-eslint/eslint-plugin": "4.15.2",
     "@typescript-eslint/parser": "4.15.2",
-    "@vercel/ncc": "0.27.0",
+    "@vercel/ncc": "0.33.4",
     "chai": "4.3.0",
     "eslint": "7.20.0",
     "eslint-config-google": "0.14.0",

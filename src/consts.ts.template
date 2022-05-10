@@ -1,3 +1,0 @@
-export const CLI_EXTENSION: string = '${CLI_EXTENSION}'
-export const TOOL_NAME: string = '${TOOL_NAME}'
-export const CLI_URL: string = '${CLI_URL}'

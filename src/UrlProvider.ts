@@ -3,7 +3,7 @@ import { CLI_EXTENSION, CLI_URL } from './consts'
 
 export default class UrlProvider implements IUrlProvider {
   private builder: ICliFileNameBuilder
-  private version: string
+  private readonly version: string
 
   constructor(
     version: string,

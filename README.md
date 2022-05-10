@@ -1,16 +1,21 @@
-# Template for TypeScript Setup GitHub Action
+# Setup Enry GitHub Action
 
-![GitHub release](https://img.shields.io/github/v/release/fabasoad/typescript-setup-action?include_prereleases) ![Lint](https://github.com/fabasoad/typescript-setup-action/workflows/Lint/badge.svg)
+![GitHub release](https://img.shields.io/github/v/release/fabasoad/setup-enry-action?include_prereleases) ![Unit Tests](https://github.com/fabasoad/setup-enry-action/workflows/Unit%20Tests/badge.svg) ![Lint](https://github.com/fabasoad/setup-enry-action/workflows/Lint/badge.svg) ![Security Tests](https://github.com/fabasoad/setup-enry-action/workflows/Security%20Tests/badge.svg) [![Total alerts](https://img.shields.io/lgtm/alerts/g/fabasoad/setup-enry-action.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/fabasoad/setup-enry-action/alerts/) [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/fabasoad/setup-enry-action.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/fabasoad/setup-enry-action/context:javascript) [![Maintainability](https://api.codeclimate.com/v1/badges/f3a3f3a8d855a5a5b7dc/maintainability)](https://codeclimate.com/github/fabasoad/setup-enry-action/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/f3a3f3a8d855a5a5b7dc/test_coverage)](https://codeclimate.com/github/fabasoad/setup-enry-action/test_coverage) [![Known Vulnerabilities](https://snyk.io/test/github/fabasoad/setup-enry-action/badge.svg?targetFile=package.json)](https://snyk.io/test/github/fabasoad/setup-enry-action?targetFile=package.json)
 
-Are you going to create a new GitHub action that will setup some tool in a pipeline and don't know how to start? This template project is exactly for you! All what you need to do is:
+[Setup Enry](https://github.com/fabasoad/setup-enry-action) GitHub Action.
 
-- [Create a new repository from this template project](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-from-a-template).
-- Follow the [instructions](https://github.com/fabasoad/typescript-setup-action/wiki/How-to-use).
-- Done :sunglasses:
+## Usage
 
-This template project is based on [fabasoad/typescript-action](https://github.com/fabasoad/typescript-action) template repository but with additional logic related to "setup" functionality. What does it mean actually? It means that you can configure GitHub Action that will setup some tool in a pipeline. Good examples are [setup-wren-action](https://github.com/fabasoad/setup-wren-action), [setup-kitten-action](https://github.com/fabasoad/setup-kitten-action), [setup-mint-action](https://github.com/fabasoad/setup-mint-action) and many others that you can find [here](https://github.com/marketplace?type=actions&query=fabasoad+Setup).
+```yaml
+name: Setup Enry
 
-## Wiki
+on: push
 
-- [How to use](https://github.com/fabasoad/typescript-setup-action/wiki/How-to-use)
-- [What you will have out of the box](https://github.com/fabasoad/typescript-setup-action/wiki/What-you-will-have-out-of-the-box)
+jobs:
+  job_1:
+    name: Example
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@main
+      - uses: fabasoad/setup-enry-action@main
+```

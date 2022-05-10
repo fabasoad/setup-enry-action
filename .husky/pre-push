@@ -1,5 +1,5 @@
 #!/bin/sh
 . "$(dirname $0)/_/husky.sh"
 
-${PM_CLI} run lint
-${PM_CLI} test
+yarn run lint
+yarn test
