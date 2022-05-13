@@ -42,4 +42,4 @@ jobs:
         with:
           version: ${{ matrix.version }}
       - name: Run CLI
-        run: enry --json
+        run: enry
