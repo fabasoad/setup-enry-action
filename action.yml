@@ -1,0 +1,15 @@
+---
+name: 'Setup Enry'
+author: 'Yevhen Fabizhevskyi'
+description: 'Setup Enry GitHub Action'
+branding:
+  icon: terminal
+  color: gray-dark
+inputs:
+  version:
+    description: 'enry version.'
+    required: false
+    default: 2.1.0
+runs:
+  using: 'node16'
+  main: 'dist/index.js'

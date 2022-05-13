@@ -3,7 +3,7 @@ import { CLI_EXTENSION, CLI_URL } from './consts'
 
 export default class UrlProvider implements IUrlProvider {
   private builder: ICliFileNameBuilder
-  private version: string
+  private readonly version: string
 
   constructor(
     version: string,
@@ -13,6 +13,8 @@ export default class UrlProvider implements IUrlProvider {
   }
 
   getUrl(): string {
-    return `${CLI_URL}/${this.version}/${this.builder.build()}.${CLI_EXTENSION}`
+    return `${CLI_URL}/` +
+        `v${this.version}/` +
+        `${this.builder.build()}.${CLI_EXTENSION}`
   }
 }

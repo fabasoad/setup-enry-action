@@ -1,0 +1,54 @@
+{
+  "name": "setup-enry-action",
+  "version": "1.0.0",
+  "description": "Setup Enry GitHub Action",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:fabasoad/setup-enry-action.git"
+  },
+  "scripts": {
+    "build": "ncc build -m src/index.ts",
+    "lint:md": "markdownlint --config .markdownlint.yml '**/*.md'",
+    "lint:es": "eslint --ext ts src",
+    "lint": "yarn run lint:md && yarn run lint:es",
+    "postinstall": "yarn husky install",
+    "security:auth": "snyk auth",
+    "security:test": "snyk test",
+    "test": "jest --config=jest.config.json --coverage"
+  },
+  "keywords": [
+    "actions",
+    "github-actions"
+  ],
+  "author": "Yevhen Fabizhevskyi",
+  "license": "MIT",
+  "homepage": "https://github.com/fabasoad/setup-enry-action#readme",
+  "dependencies": {
+    "@actions/core": "1.8.1",
+    "@actions/tool-cache": "2.0.0",
+    "glob": "8.0.2",
+    "winston": "3.7.2"
+  },
+  "devDependencies": {
+    "@types/chai": "4.3.1",
+    "@types/jest": "27.5.1",
+    "@types/node": "16.11.35",
+    "@typescript-eslint/eslint-plugin": "5.23.0",
+    "@typescript-eslint/parser": "5.23.0",
+    "@vercel/ncc": "0.33.4",
+    "chai": "4.3.6",
+    "eslint": "8.15.0",
+    "eslint-config-google": "0.14.0",
+    "git-branch-is": "4.0.0",
+    "husky": "5.1.1",
+    "jest": "28.1.0",
+    "jest-circus": "28.1.0",
+    "markdownlint-cli": "0.31.1",
+    "mocha-param": "2.0.1",
+    "snyk": "1.930.0",
+    "ts-jest": "28.0.2",
+    "typescript": "4.6.4"
+  },
+  "snyk": true
+}

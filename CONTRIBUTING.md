@@ -27,7 +27,7 @@ Pull requests are the best way to propose changes to the codebase (we use [GitHu
 
 In short, when you submit code changes, your submissions are understood to be under the same [MIT License](http://choosealicense.com/licenses/mit/) that covers the project. Feel free to contact the maintainers if that's a concern.
 
-## Report bugs using [GitHub Issues](https://github.com/fabasoad/typescript-setup-action/issues)
+## Report bugs using [GitHub Issues](https://github.com/fabasoad/setup-enry-action/issues)
 
 We use GitHub issues to track public bugs. Report a bug by opening a new issue. It's that easy!
 
@@ -37,10 +37,7 @@ This repository has issue templates for bug report and feature request. Please u
 
 ## Use a Consistent Coding Style
 
-Please follow all the following rules:
-
-- [TypeScript](https://github.com/excelmicro/typescript) guide provided by [excelmicro](https://github.com/excelmicro) for coding style.
-- [Makefile](https://www.gnu.org/prep/standards/html_node/Makefile-Conventions.html) guide provided by [GNU.org](gnu.org) for coding style.
+Please follow all the rules from [this](https://github.com/excelmicro/typescript) great guide provided by [excelmicro](https://github.com/excelmicro) for coding style.
 
 ## License
 
