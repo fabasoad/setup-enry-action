@@ -34,10 +34,10 @@ jobs:
 
 ```shell
 Run enry
-59.57%	HTML
-21.29%	JavaScript
-14.25%	TypeScript
-4.89%	CSS
+59.57%  HTML
+21.29%  JavaScript
+14.25%  TypeScript
+4.89%   CSS
 ```
 
 ### Useful examples
@@ -47,10 +47,10 @@ Run enry
 ```shell
 # Simple output
 enry
-59.57%	HTML
-21.29%	JavaScript
-14.25%	TypeScript
-4.89%	CSS
+59.57%  HTML
+21.29%  JavaScript
+14.25%  TypeScript
+4.89%   CSS
 
 # Convert to JSON
 echo "{$(enry | sed 's/^\(.*\)\t\(.*\)$/\"\2\":\"\1\"/' | paste -sd "," -)}"
