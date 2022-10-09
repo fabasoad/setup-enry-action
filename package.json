@@ -1,6 +1,6 @@
 {
   "name": "setup-enry-action",
-  "version": "1.0.1",
+  "version": "0.1.2",
   "description": "Setup Enry GitHub Action",
   "main": "dist/index.js",
   "repository": {
