@@ -1,6 +1,6 @@
 import ExecutableFileFinder from '../ExecutableFileFinder'
-import fs from 'fs';
-import itParam from 'mocha-param';
+import fs from 'fs'
+import itParam from 'mocha-param'
 
 const TEST_EXE = 'file.exe'
 
@@ -24,8 +24,8 @@ describe('ExecutableFileFinder::find', () => {
   beforeEach(() => {
     (fs.readdirSync as jest.Mock).mockClear();
     (fs.statSync as jest.Mock).mockClear()
-    const cliName = '1clx8w43'
-    finder = new ExecutableFileFinder(cliName, {
+    const version = '1clx8w43'
+    finder = new ExecutableFileFinder(version, {
       getExeFileName: () => TEST_EXE
     })
   })

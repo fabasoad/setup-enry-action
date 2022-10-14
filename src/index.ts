@@ -1,5 +1,5 @@
-import { getInput, setFailed } from '@actions/core';
-import Installer from './Installer';
+import { getInput, setFailed } from '@actions/core'
+import Installer from './Installer'
 
 export interface IInstallerFactory {
   // eslint-disable-next-line no-unused-vars
