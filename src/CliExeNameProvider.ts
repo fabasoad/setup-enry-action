@@ -2,7 +2,7 @@ import os from 'os'
 import { TOOL_NAME } from './consts'
 
 export default class CliExeNameProvider implements ICliExeNameProvider {
-  private version: string
+  private readonly version: string
 
   constructor(version: string) {
     this.version = version
