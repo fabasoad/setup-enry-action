@@ -25,12 +25,12 @@ jobs:
         uses: ./
         with:
           version: ${{ matrix.version }}
-      - name: Print
-        run: |
-          env
-          echo "ls -A :"
-          ls -A "/home/runner/work/setup-enry-action/setup-enry-action/enry_linux_amd64"
-        shell: bash
+#      - name: Print
+#        run: |
+#          env
+#          echo "ls -A :"
+#          ls -A "/home/runner/work/setup-enry-action/setup-enry-action/enry_linux_amd64"
+#        shell: bash
       - name: Run CLI
-        run: enry
+        run: enry --version
         shell: bash
