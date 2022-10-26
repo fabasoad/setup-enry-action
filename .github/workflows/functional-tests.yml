@@ -25,5 +25,9 @@ jobs:
         uses: ./
         with:
           version: ${{ matrix.version }}
+      - name: Print
+        run: env
+        shell: bash
       - name: Run CLI
         run: enry
+        shell: bash
