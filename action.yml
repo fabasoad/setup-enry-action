@@ -11,5 +11,35 @@ inputs:
     required: false
     default: 2.1.0
 runs:
-  using: 'node16'
-  main: 'dist/index.js'
+  using: 'composite'
+  steps:
+    - name: OS validation
+      id: os_validation
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const valid = '${{ runner.arch }}' === 'X64' && ('${{ runner.os }}' === 'macOS' || '${{ runner.os }}' === 'Linux');
+          if (!valid) {
+            core.setFailed('${{ runner.os }} ${{ runner.arch }} is not supported');
+          }
+          return valid;
+    - name: Collect info
+      if: ${{ steps.os_validation.outputs.result == 'true' }}
+      id: info
+      run: |
+        result=$(if command -v enry >/dev/null 2>&1; then echo true; else echo false; fi)
+        echo "ENRY_INSTALLED=$result" >> $GITHUB_OUTPUT
+        if [[ "${{ runner.os }}" == "macOS" ]]; then
+          ENRY_BINARY=darwin_amd64
+        else
+          ENRY_BINARY=linux_amd64
+        fi
+        echo "ENRY_BINARY=$ENRY_BINARY" >> $GITHUB_OUTPUT
+      shell: bash
+    - name: Setup enry
+      if: ${{ steps.os_validation.outputs.result == 'true' && steps.info.outputs.ENRY_INSTALLED == 'false' }}
+      run: |
+        wget -c https://github.com/src-d/enry/releases/download/v${{ inputs.version }}/enry_v${{ inputs.version }}_${{ steps.info.outputs.ENRY_BINARY }}.tar.gz -O - | tar -xz
+        chmod +x "$(pwd)/enry_${{ steps.info.outputs.ENRY_BINARY }}/enry"
+        echo "$(pwd)/enry_${{ steps.info.outputs.ENRY_BINARY }}" >> $GITHUB_PATH
+      shell: bash
