@@ -4,11 +4,10 @@
 
 Please check if your PR fulfills the following requirements:
 
-- [ ] I have read the [CONTRIBUTING](https://github.com/fabasoad/setup-enry-action/blob/main/CONTRIBUTING.md) doc.
+- [ ] I have read the [CONTRIBUTING](https://github.com/fabasoad/setup-enry-action/blob/main/CONTRIBUTING.md)
+doc.
 - [ ] Tests for the changes have been added (for bug fixes / features).
 - [ ] Docs have been reviewed and added / updated if needed (for bug fixes / features).
-- [ ] Build (`yarn run build`) was run locally and any changes were pushed.
-- [ ] Tests (`yarn test`) has passed locally and any fixes were made for failures.
 
 ## Pull request type
 
@@ -26,17 +25,17 @@ Please check the type of change your PR introduces:
 - [ ] Documentation content changes
 - [ ] Other (please describe):
 
-## What is the current behavior?
+## What is the current behavior
 <!-- Please describe the current behavior that you are modifying, or link to a relevant issue. -->
 
-## What is the new behavior?
+## What is the new behavior
 <!-- Please describe the behavior or changes that are being added by this PR. -->
 
 -
 -
 -
 
-## Does this introduce a breaking change?
+## Does this introduce a breaking change
 
 - [ ] Yes
 - [ ] No
