@@ -41,5 +41,5 @@ runs:
       run: |
         wget -c https://github.com/src-d/enry/releases/download/v${{ inputs.version }}/enry_v${{ inputs.version }}_${{ steps.info.outputs.ENRY_BINARY }}.tar.gz -O - | tar -xz
         echo "$(pwd)/enry_${{ steps.info.outputs.ENRY_BINARY }}" >> $GITHUB_PATH
-        chmod +x "enry_${{ steps.info.outputs.ENRY_BINARY }}/enry"
+        chmod +x "$(pwd)/enry_${{ steps.info.outputs.ENRY_BINARY }}/enry"
       shell: bash
