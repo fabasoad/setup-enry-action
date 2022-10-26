@@ -16,8 +16,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ['ubuntu-latest', 'macos-latest']
-        version: ['1.7.0', '1.7.1', '1.7.2', '1.7.3', '2.0.0', '2.1.0']
+        os: ['windows-latest']
+        version: ['2.1.0']
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
