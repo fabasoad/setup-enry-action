@@ -6,6 +6,8 @@
 
 This action sets up an [enry](https://github.com/src-d/enry) tool.
 
+Supported OS: Linux, macOS.
+
 ## Inputs
 
 | Name    | Required | Description                                                                   | Default | Possible values        |
