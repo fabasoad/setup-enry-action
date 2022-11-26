@@ -5,18 +5,17 @@ on:
   push:
     branches:
       - 'main'
-      - 'fix-*'
-      - 'feature-*'
+  pull_request:
 
 jobs:
-  functional_tests:
-    name: Run script
+  setup-enry:
+    name: Setup enry
     timeout-minutes: 5
     strategy:
       fail-fast: false
       matrix:
         os: ['ubuntu-latest', 'macos-latest']
-        version: ['1.7.0', '1.7.1', '1.7.2', '1.7.3', '2.0.0', '2.1.0']
+        version: ['1.7.1', '1.7.2', '1.7.3', '2.0.0', '2.1.0']
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
@@ -26,4 +25,4 @@ jobs:
           version: ${{ matrix.version }}
       - name: Run CLI
         run: enry --version
-        shell: bash
+        shell: sh
