@@ -23,7 +23,7 @@ jobs:
       - name: Get current release tag
         id: current_release
         run: echo "tag=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_OUTPUT
-        shell: sh
+        shell: bash
       - name: Build changelog
         id: changelog
         run: |
