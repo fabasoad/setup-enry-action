@@ -32,7 +32,7 @@ jobs:
           body="${body//$'\n'/'%0A'}"
           body="${body//$'\r'/'%0D'}"
           echo "body=${body}" >> $GITHUB_OUTPUT
-        shell: sh
+        shell: bash
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
