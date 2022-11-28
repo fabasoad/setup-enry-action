@@ -4,15 +4,15 @@
 ![Functional Tests](https://github.com/fabasoad/setup-enry-action/workflows/Functional%20Tests/badge.svg)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/fabasoad/setup-enry-action/main.svg)](https://results.pre-commit.ci/latest/github/fabasoad/setup-enry-action/main)
 
-This action sets up an [enry](https://github.com/src-d/enry) tool.
+This action sets up an [enry](https://github.com/go-enry/enry) tool.
 
 Supported OS: Linux, macOS.
 
 ## Inputs
 
-| Name    | Required | Description                                                                   | Default | Possible values        |
-|---------|----------|-------------------------------------------------------------------------------|---------|------------------------|
-| version | No       | Enry version that can be found [here](https://github.com/src-d/enry/releases) | `2.1.0` | `1.7.3`, `2.0.0`, etc. |
+| Name    | Required | Description                                                                     | Default | Possible values        |
+|---------|----------|---------------------------------------------------------------------------------|---------|------------------------|
+| version | No       | Enry version that can be found [here](https://github.com/go-enry/enry/releases) | `1.1.0` | `1.1.0`, `1.0.0`, etc. |
 
 ## Usage
 
@@ -22,7 +22,7 @@ name: Setup Enry
 on: push
 
 jobs:
-  job_1:
+  example:
     name: Example
     runs-on: ubuntu-latest
     steps:
