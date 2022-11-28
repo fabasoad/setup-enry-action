@@ -64,7 +64,7 @@ runs:
       if: ${{ steps.info.outputs.ENRY_INSTALLED == 'false' }}
       run: |
         if [ "${{ runner.os }}" = "macOS" ]; then
-          brew install md5sha1sum
+          brew uninstall md5sha1sum
         fi
         rm -f enry-v${{ inputs.version }}-${{ steps.info.outputs.ENRY_BINARY }}-amd64.*
       shell: sh
