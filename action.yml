@@ -50,7 +50,7 @@ runs:
         else
           echo " enry-v${{ inputs.version }}-${{ steps.info.outputs.ENRY_BINARY }}-amd64.tar.gz" >> enry-v${{ inputs.version }}-${{ steps.info.outputs.ENRY_BINARY }}-amd64.tar.gz.md5
           md5sum --check enry-v${{ inputs.version }}-${{ steps.info.outputs.ENRY_BINARY }}-amd64.tar.gz.md5
-          tar xz enry-v${{ inputs.version }}-${{ steps.info.outputs.ENRY_BINARY }}-amd64.tar.gz
+          tar -xvzf enry-v${{ inputs.version }}-${{ steps.info.outputs.ENRY_BINARY }}-amd64.tar.gz
           chmod +x ./enry
         fi
         rm -f enry-v${{ inputs.version }}-${{ steps.info.outputs.ENRY_BINARY }}-amd64.*
