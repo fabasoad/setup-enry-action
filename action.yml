@@ -9,40 +9,63 @@ inputs:
   version:
     description: 'enry version.'
     required: false
-    default: 2.1.0
+    default: 1.1.0
 runs:
   using: 'composite'
   steps:
-    - name: OS validation
-      id: os_validation
-      uses: actions/github-script@v6
-      with:
-        script: |
-          const valid = '${{ runner.arch }}' === 'X64' && ('${{ runner.os }}' === 'macOS' || '${{ runner.os }}' === 'Linux');
-          if (!valid) {
-            core.setFailed('${{ runner.os }} ${{ runner.arch }} is not supported');
-          }
-          return valid;
     - name: Collect info
-      if: ${{ steps.os_validation.outputs.result == 'true' }}
       id: info
       run: |
         ENRY_INSTALLED=$(if command -v enry >/dev/null 2>&1; then echo true; else echo false; fi)
         echo "ENRY_INSTALLED=$ENRY_INSTALLED" >> $GITHUB_OUTPUT
         if [ "${{ runner.os }}" = "macOS" ]; then
-          ENRY_BINARY=darwin_amd64
+          ENRY_BINARY=darwin
+        elif [ "${{ runner.os }}" = "Linux" ]; then
+          ENRY_BINARY=linux
         else
-          ENRY_BINARY=linux_amd64
+          ENRY_BINARY=windows
         fi
         echo "ENRY_BINARY=$ENRY_BINARY" >> $GITHUB_OUTPUT
         mkdir -p "$GITHUB_WORKSPACE/enry"
         echo "ENRY_PATH=$GITHUB_WORKSPACE/enry" >> $GITHUB_OUTPUT
       shell: sh
+    - name: Download enry
+      if: ${{ steps.info.outputs.ENRY_INSTALLED == 'false' }}
+      uses: robinraju/release-downloader@v1.6
+      with:
+        repository: go-enry/enry
+        latest: false
+        tag: v${{ inputs.version }}
+        fileName: "enry-v${{ inputs.version }}-${{ steps.info.outputs.ENRY_BINARY }}-amd64.*"
+        tarBall: false
+        zipBall: false
+        out-file-path: enry
+    - name: Install dependencies (macOS)
+      if: ${{ steps.info.outputs.ENRY_INSTALLED == 'false' && runner.os == 'macOS' }}
+      run: brew install md5sha1sum
+      shell: sh
     - name: Setup enry
-      if: ${{ steps.os_validation.outputs.result == 'true' && steps.info.outputs.ENRY_INSTALLED == 'false' }}
+      if: ${{ steps.info.outputs.ENRY_INSTALLED == 'false' }}
       run: |
-        wget -c https://github.com/src-d/enry/releases/download/v${{ inputs.version }}/enry_v${{ inputs.version }}_${{ steps.info.outputs.ENRY_BINARY }}.tar.gz -O - | tar -xz
-        chmod +x "${{ steps.info.outputs.ENRY_PATH }}/enry_${{ steps.info.outputs.ENRY_BINARY }}/enry"
-        echo "${{ steps.info.outputs.ENRY_PATH }}/enry_${{ steps.info.outputs.ENRY_BINARY }}" >> $GITHUB_PATH
+        if [ "${{ runner.os }}" = "Windows" ]; then
+          echo " enry-v${{ inputs.version }}-${{ steps.info.outputs.ENRY_BINARY }}-amd64.zip" >> enry-v${{ inputs.version }}-${{ steps.info.outputs.ENRY_BINARY }}-amd64.zip.md5
+          md5sum --check enry-v${{ inputs.version }}-${{ steps.info.outputs.ENRY_BINARY }}-amd64.zip.md5
+          unzip enry-v${{ inputs.version }}-${{ steps.info.outputs.ENRY_BINARY }}-amd64.zip
+        else
+          echo " enry-v${{ inputs.version }}-${{ steps.info.outputs.ENRY_BINARY }}-amd64.tar.gz" >> enry-v${{ inputs.version }}-${{ steps.info.outputs.ENRY_BINARY }}-amd64.tar.gz.md5
+          md5sum --check enry-v${{ inputs.version }}-${{ steps.info.outputs.ENRY_BINARY }}-amd64.tar.gz.md5
+          tar -xvzf enry-v${{ inputs.version }}-${{ steps.info.outputs.ENRY_BINARY }}-amd64.tar.gz
+          chmod +x ./enry
+        fi
+        echo "${{ steps.info.outputs.ENRY_PATH }}" >> $GITHUB_PATH
+      shell: sh
+      working-directory: ${{ steps.info.outputs.ENRY_PATH }}
+    - name: Clean up
+      if: ${{ steps.info.outputs.ENRY_INSTALLED == 'false' }}
+      run: |
+        if [ "${{ runner.os }}" = "macOS" ]; then
+          brew uninstall md5sha1sum
+        fi
+        rm -f enry-v${{ inputs.version }}-${{ steps.info.outputs.ENRY_BINARY }}-amd64.*
       shell: sh
       working-directory: ${{ steps.info.outputs.ENRY_PATH }}
