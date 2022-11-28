@@ -40,6 +40,10 @@ runs:
         tarBall: false
         zipBall: false
         out-file-path: enry
+    - name: Install dependencies (macOS)
+      if: ${{ steps.info.outputs.ENRY_INSTALLED == 'false' && runner.os == 'macOS' }}
+      run: brew install md5sha1sum
+      shell: sh
     - name: Setup enry
       if: ${{ steps.info.outputs.ENRY_INSTALLED == 'false' }}
       run: |
@@ -53,7 +57,15 @@ runs:
           tar -xvzf enry-v${{ inputs.version }}-${{ steps.info.outputs.ENRY_BINARY }}-amd64.tar.gz
           chmod +x ./enry
         fi
-        rm -f enry-v${{ inputs.version }}-${{ steps.info.outputs.ENRY_BINARY }}-amd64.*
         echo "${{ steps.info.outputs.ENRY_PATH }}" >> $GITHUB_PATH
+      shell: sh
+      working-directory: ${{ steps.info.outputs.ENRY_PATH }}
+    - name: Clean up
+      if: ${{ steps.info.outputs.ENRY_INSTALLED == 'false' }}
+      run: |
+        if [ "${{ runner.os }}" = "macOS" ]; then
+          brew install md5sha1sum
+        fi
+        rm -f enry-v${{ inputs.version }}-${{ steps.info.outputs.ENRY_BINARY }}-amd64.*
       shell: sh
       working-directory: ${{ steps.info.outputs.ENRY_PATH }}
