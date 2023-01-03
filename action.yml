@@ -9,7 +9,7 @@ inputs:
   version:
     description: 'enry version.'
     required: false
-    default: 1.1.0
+    default: 1.2.0
 runs:
   using: 'composite'
   steps:
@@ -31,7 +31,7 @@ runs:
       shell: sh
     - name: Download enry
       if: ${{ steps.info.outputs.ENRY_INSTALLED == 'false' }}
-      uses: robinraju/release-downloader@v1.6
+      uses: robinraju/release-downloader@v1.7
       with:
         repository: go-enry/enry
         latest: false
