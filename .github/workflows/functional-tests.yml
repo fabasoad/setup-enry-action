@@ -1,11 +1,15 @@
 ---
 name: Functional Tests
 
-on:
+on:  # yamllint disable-line rule:truthy
   push:
     branches:
       - 'main'
   pull_request:
+
+defaults:
+  run:
+    shell: sh
 
 jobs:
   setup-enry:
@@ -25,4 +29,3 @@ jobs:
           version: ${{ matrix.version }}
       - name: Run CLI
         run: enry --version
-        shell: sh
