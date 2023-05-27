@@ -2,8 +2,8 @@
 
 [![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg)](https://stand-with-ukraine.pp.ua)
 ![GitHub release](https://img.shields.io/github/v/release/fabasoad/setup-enry-action?include_prereleases)
-![Functional Tests](https://github.com/fabasoad/setup-enry-action/workflows/Functional%20Tests/badge.svg)
-[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/fabasoad/setup-enry-action/main.svg)](https://results.pre-commit.ci/latest/github/fabasoad/setup-enry-action/main)
+![functional-tests](https://github.com/fabasoad/setup-enry-action/actions/workflows/functional-tests.yml/badge.svg)
+![pre-commit](https://github.com/fabasoad/setup-enry-action/actions/workflows/pre-commit.yml/badge.svg)
 
 This action sets up an [enry](https://github.com/go-enry/enry) tool.
 
@@ -11,9 +11,11 @@ Supported OS: Linux, macOS.
 
 ## Inputs
 
+<!-- prettier-ignore-start -->
 | Name    | Required | Description                                                                     | Default | Possible values        |
 |---------|----------|---------------------------------------------------------------------------------|---------|------------------------|
 | version | No       | Enry version that can be found [here](https://github.com/go-enry/enry/releases) | `1.2.0` | `1.1.0`, `1.0.0`, etc. |
+<!-- prettier-ignore-end -->
 
 ## Usage
 

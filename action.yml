@@ -1,17 +1,17 @@
 ---
-name: 'Setup Enry'
-author: 'Yevhen Fabizhevskyi'
-description: 'Setup Enry GitHub Action'
+name: "Setup Enry"
+author: "Yevhen Fabizhevskyi"
+description: "Setup Enry GitHub Action"
 branding:
   icon: terminal
   color: gray-dark
 inputs:
   version:
-    description: 'enry version.'
+    description: "enry version."
     required: false
-    default: '1.2.0'
+    default: "1.2.0"
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - name: Collect info
       id: info
