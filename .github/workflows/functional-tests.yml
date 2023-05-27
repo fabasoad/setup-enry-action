@@ -1,10 +1,10 @@
 ---
 name: Functional Tests
 
-on:  # yamllint disable-line rule:truthy
+on: # yamllint disable-line rule:truthy
   push:
     branches:
-      - 'main'
+      - "main"
   pull_request:
 
 defaults:
@@ -18,8 +18,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ['ubuntu', 'macos', 'windows']
-        version: ['1.0.0', '1.1.0', '1.2.0']
+        os: ["ubuntu", "macos", "windows"]
+        version: ["1.0.0", "1.1.0", "1.2.0"]
     runs-on: ${{ matrix.os }}-latest
     steps:
       - uses: actions/checkout@v3
