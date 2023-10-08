@@ -14,7 +14,7 @@ Supported OS: Linux, macOS.
 <!-- prettier-ignore-start -->
 | Name    | Required | Description                                                                     | Default | Possible values        |
 |---------|----------|---------------------------------------------------------------------------------|---------|------------------------|
-| version | No       | Enry version that can be found [here](https://github.com/go-enry/enry/releases) | `1.2.0` | `1.1.0`, `1.0.0`, etc. |
+| version | No       | Enry version that can be found [here](https://github.com/go-enry/enry/releases) | `1.3.0` | `1.2.0`, `1.1.0`, etc. |
 <!-- prettier-ignore-end -->
 
 ## Usage
