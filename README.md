@@ -3,7 +3,7 @@
 [![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg)](https://stand-with-ukraine.pp.ua)
 ![GitHub release](https://img.shields.io/github/v/release/fabasoad/setup-enry-action?include_prereleases)
 ![functional-tests](https://github.com/fabasoad/setup-enry-action/actions/workflows/functional-tests.yml/badge.svg)
-![pre-commit](https://github.com/fabasoad/setup-enry-action/actions/workflows/pre-commit.yml/badge.svg)
+![linting](https://github.com/fabasoad/setup-enry-action/actions/workflows/linting.yml/badge.svg)
 
 This action sets up an [enry](https://github.com/go-enry/enry) tool.
 
