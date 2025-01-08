@@ -7,69 +7,89 @@ branding:
   color: gray-dark
 inputs:
   version:
-    description: "enry version."
+    description: enry version. Defaults to the latest version.
     required: false
-    default: "1.2.0"
+    default: "latest"
+  force:
+    description: |
+      If "false" skips installation if enry is already installed. If "true"
+      installs enry in any case. Defaults to "false".
+    required: false
+    default: "false"
+  github-token:
+    description: |
+      GitHub token that is used to send requests to GitHub API such as downloading
+      asset. Defaults to the token provided by GitHub Actions environment.
+    required: false
+    default: ${{ github.token }}
+outputs:
+  installed:
+    description: Whether enry was installed or not.
+    value: "${{ steps.install-enry.outcome == 'success' }}"
 runs:
   using: "composite"
   steps:
     - name: Collect info
       id: info
-      run: |
-        ENRY_INSTALLED=$(if command -v enry >/dev/null 2>&1; then echo true; else echo false; fi)
-        echo "ENRY_INSTALLED=$ENRY_INSTALLED" >> $GITHUB_OUTPUT
-        if [ "${RUNNER_OS}" = "macOS" ]; then
-          ENRY_BINARY=darwin
-        elif [ "${RUNNER_OS}" = "Linux" ]; then
-          ENRY_BINARY=linux
-        else
-          ENRY_BINARY=windows
-        fi
-        echo "ENRY_BINARY=$ENRY_BINARY" >> $GITHUB_OUTPUT
-        mkdir -p "$GITHUB_WORKSPACE/enry"
-        echo "ENRY_PATH=$GITHUB_WORKSPACE/enry" >> $GITHUB_OUTPUT
+      env:
+        INPUT_FORCE: "${{ inputs.force }}"
+      run: ./collect-info.sh "${INPUT_FORCE}"
       shell: sh
+      working-directory: "${{ github.action_path }}/src"
+
+    - name: Setup curl
+      if: ${{ steps.info.outputs.bin-installed == 'false' && steps.info.outputs.curl-installed == 'false' }}
+      run: ./install-curl.sh
+      shell: sh
+      working-directory: "${{ github.action_path }}/src"
+
+    - name: Setup git
+      if: ${{ steps.info.outputs.bin-installed == 'false' && steps.info.outputs.git-installed == 'false' }}
+      run: ./install-git.sh
+      shell: sh
+      working-directory: "${{ github.action_path }}/src"
+
+    - name: Setup jq
+      if: ${{ steps.info.outputs.bin-installed == 'false' }}
+      uses: dcarbone/install-jq-action@v3
+
+    - name: Get latest release
+      if: ${{ steps.info.outputs.bin-installed == 'false' && inputs.version == 'latest' }}
+      id: latest-release
+      env:
+        INPUT_GITHUB_TOKEN: "${{ inputs.github-token }}"
+      run: ./get-latest-release.sh "go-enry/enry" "${INPUT_GITHUB_TOKEN}"
+      shell: sh
+      working-directory: "${{ github.action_path }}/src"
+
     - name: Download enry
-      if: ${{ steps.info.outputs.ENRY_INSTALLED == 'false' }}
-      uses: robinraju/release-downloader@v1.11
+      if: ${{ steps.info.outputs.bin-installed == 'false' }}
+      id: download-enry
+      uses: actions/checkout@v4
       with:
-        repository: go-enry/enry
-        latest: false
-        tag: v${{ inputs.version }}
-        fileName: "enry-v${{ inputs.version }}-${{ steps.info.outputs.ENRY_BINARY }}-amd64.*"
-        tarBall: false
-        zipBall: false
-        out-file-path: enry
-    - name: Install dependencies (macOS)
-      if: ${{ steps.info.outputs.ENRY_INSTALLED == 'false' && runner.os == 'macOS' }}
-      run: brew install md5sha1sum
-      shell: sh
-    - name: Setup enry
-      if: ${{ steps.info.outputs.ENRY_INSTALLED == 'false' }}
+        repository: "go-enry/enry"
+        ref: ${{ format('v{0}', inputs.version == 'latest' && steps.latest-release.outputs.version || inputs.version) }}
+        fetch-depth: 1
+        path: ${{ steps.info.outputs.bin-dir }}
+
+    - name: Setup Go
+      if: ${{ steps.info.outputs.bin-installed == 'false' && steps.info.outputs.go-installed == 'false' }}
+      uses: actions/setup-go@v5
+      with:
+        go-version-file: "${{ steps.info.outputs.bin-path }}/go.mod"
+        cache-dependency-path: "${{ steps.info.outputs.bin-path }}"
+
+    - name: Install enry
+      if: ${{ steps.info.outputs.bin-installed == 'false' }}
+      id: install-enry
       env:
         INPUT_VERSION: "${{ inputs.version }}"
       run: |
-        if [ "${RUNNER_OS}" = "Windows" ]; then
-          echo " enry-v${INPUT_VERSION}-${{ steps.info.outputs.ENRY_BINARY }}-amd64.zip" >> "enry-v${INPUT_VERSION}-${{ steps.info.outputs.ENRY_BINARY }}-amd64.zip.md5"
-          md5sum --check "enry-v${INPUT_VERSION}-${{ steps.info.outputs.ENRY_BINARY }}-amd64.zip.md5"
-          unzip "enry-v${INPUT_VERSION}-${{ steps.info.outputs.ENRY_BINARY }}-amd64.zip"
-        else
-          echo " enry-v${INPUT_VERSION}-${{ steps.info.outputs.ENRY_BINARY }}-amd64.tar.gz" >> "enry-v${INPUT_VERSION}-${{ steps.info.outputs.ENRY_BINARY }}-amd64.tar.gz.md5"
-          md5sum --check "enry-v${INPUT_VERSION}-${{ steps.info.outputs.ENRY_BINARY }}-amd64.tar.gz.md5"
-          tar -xvzf "enry-v${INPUT_VERSION}-${{ steps.info.outputs.ENRY_BINARY }}-amd64.tar.gz"
-          chmod +x ./enry
-        fi
-        echo "${{ steps.info.outputs.ENRY_PATH }}" >> "$GITHUB_PATH"
+        go build -ldflags="-X main.commit=$(git rev-parse HEAD) -X main.version=${{ steps.download-enry.outputs.ref }}"
+        echo "$(pwd)" >> "$GITHUB_PATH"
       shell: sh
-      working-directory: ${{ steps.info.outputs.ENRY_PATH }}
-    - name: Clean up
-      if: ${{ steps.info.outputs.ENRY_INSTALLED == 'false' }}
-      env:
-        INPUT_VERSION: "${{ inputs.version }}"
-      run: |
-        if [ "${RUNNER_OS}" = "macOS" ]; then
-          brew uninstall md5sha1sum
-        fi
-        rm -f enry-v${INPUT_VERSION}-${{ steps.info.outputs.ENRY_BINARY }}-amd64.*
+      working-directory: ${{ steps.info.outputs.bin-path }}
+
+    - name: Print version
+      run: enry --version
       shell: sh
-      working-directory: ${{ steps.info.outputs.ENRY_PATH }}

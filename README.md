@@ -4,18 +4,40 @@
 ![GitHub release](https://img.shields.io/github/v/release/fabasoad/setup-enry-action?include_prereleases)
 ![functional-tests](https://github.com/fabasoad/setup-enry-action/actions/workflows/functional-tests.yml/badge.svg)
 ![linting](https://github.com/fabasoad/setup-enry-action/actions/workflows/linting.yml/badge.svg)
+![security](https://github.com/fabasoad/setup-enry-action/actions/workflows/security.yml/badge.svg)
 
 This action sets up an [enry](https://github.com/go-enry/enry) tool.
 
-Supported OS: Linux, macOS.
+## Supported OS
+
+<!-- prettier-ignore-start -->
+| OS      |                    |
+|---------|--------------------|
+| Windows | :white_check_mark: |
+| Linux   | :white_check_mark: |
+| macOS   | :white_check_mark: |
+<!-- prettier-ignore-end -->
+
+## Prerequisites
+
+The following tools have to be installed for successful work of this GitHub Action:
+[curl](https://curl.se).
 
 ## Inputs
 
-<!-- prettier-ignore-start -->
-| Name    | Required | Description                                                                     | Default | Possible values        |
-|---------|----------|---------------------------------------------------------------------------------|---------|------------------------|
-| version | No       | Enry version that can be found [here](https://github.com/go-enry/enry/releases) | `1.2.0` | `1.1.0`, `1.0.0`, etc. |
-<!-- prettier-ignore-end -->
+```yaml
+- uses: fabasoad/setup-enry-action@v0
+  with:
+    # (Optional) enry version. Defaults to the latest version.
+    version: "1.3.0"
+    # (Optional) If "false" skips installation if enry is already installed.
+    # If "true" installs enry in any case. Defaults to "false".
+    force: "false"
+    # (Optional) GitHub token that is used to send requests to GitHub API such
+    # as getting latest release. Defaults to the token provided by GitHub Actions
+    # environment.
+    github-token: "${{ github.token }}"
+```
 
 ## Usage
 
@@ -29,8 +51,8 @@ jobs:
     name: Example
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@main
-      - uses: fabasoad/setup-enry-action@main
+      - uses: actions/checkout@v4
+      - uses: fabasoad/setup-enry-action@v0
       - name: Run CLI
         run: enry
 ```

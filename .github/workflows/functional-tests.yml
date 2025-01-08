@@ -2,31 +2,143 @@
 name: Functional Tests
 
 on: # yamllint disable-line rule:truthy
-  pull_request: {}
   push:
     branches:
       - main
+  pull_request:
+    paths:
+      - .github/workflows/functional-tests.yml
+      - src/**
+      - action.yml
+  schedule:
+    # Every Friday at 09:00 JST
+    - cron: "0 0 * * 5"
+  workflow_dispatch: {}
 
 defaults:
   run:
     shell: sh
 
 jobs:
+  get-versions:
+    name: Get 3 latest versions
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      versions: ${{ steps.prepare-list.outputs.versions }}
+    steps:
+      - name: Get releases
+        id: github-releases
+        uses: yakubique/github-releases@v1.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          repository: "go-enry/enry"
+          sort: "desc"
+      - name: Prepare list
+        id: prepare-list
+        env:
+          RELEASES_AMOUNT: "3"
+        run: |
+          versions=$(echo '${{ steps.github-releases.outputs.releases }}' \
+            | jq -c -r --arg n "${RELEASES_AMOUNT}" '.[0:($n | tonumber)] | map(sub("^v"; "")) | . += ["latest"]')
+          echo "versions=${versions}" >> "$GITHUB_OUTPUT"
   setup-enry:
     name: Setup enry
+    needs: [get-versions]
+    runs-on: ${{ matrix.os }}-latest
     timeout-minutes: 5
     strategy:
       fail-fast: false
       matrix:
         os: ["ubuntu", "macos", "windows"]
-        version: ["1.0.0", "1.1.0", "1.2.0"]
-    runs-on: ${{ matrix.os }}-latest
+        version: ${{ fromJSON(needs.get-versions.outputs.versions) }}
+        exclude:
+          - os: "macos"
+            version: "1.1.0"
     steps:
       - name: Checkout ${{ github.repository }}
         uses: actions/checkout@v4
       - name: Setup Enry
+        id: setup-enry
         uses: ./
         with:
           version: ${{ matrix.version }}
-      - name: Run CLI
-        run: enry --version
+      - name: Test action completion
+        run: |
+          test_equal() {
+            if [ "${2}" != "${3}" ]; then
+              echo "::error title=${1}::Expected: ${3}. Actual: ${2}."
+              exit 1
+            fi
+          }
+          test_equal "enry should be installed" \
+            "${{ steps.setup-enry.outputs.installed }}" \
+            "true"
+      - name: Print info
+        run: enry
+  setup-enry-in-container:
+    name: Setup enry in container
+    needs: [get-versions]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    container:
+      image: ${{ matrix.image }}:latest
+    strategy:
+      fail-fast: false
+      matrix:
+        image: ["ubuntu"]
+    steps:
+      - name: Checkout ${{ github.repository }}
+        uses: actions/checkout@v4
+      - name: Setup Enry
+        id: setup-enry
+        uses: ./
+        with:
+          version: "1.3.0"
+      - name: Test action completion
+        run: |
+          test_equal() {
+            if [ "${2}" != "${3}" ]; then
+              echo "::error title=${1}::Expected: ${3}. Actual: ${2}."
+              exit 1
+            fi
+          }
+          test_equal "enry should be installed" \
+            "${{ steps.setup-enry.outputs.installed }}" \
+            "true"
+      - name: Print info
+        run: enry
+  test-force:
+    name: Test force
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        force: ["true", "false"]
+    steps:
+      - name: Checkout ${{ github.repository }}
+        uses: actions/checkout@v4
+      - name: Setup enry 1
+        id: setup-enry-1
+        uses: ./
+      - name: Setup enry 2
+        id: setup-enry-2
+        uses: ./
+        with:
+          force: ${{ matrix.force }}
+      - name: Test action completion
+        run: |
+          test_equal() {
+            if [ "${2}" != "${3}" ]; then
+              echo "::error title=${1}::Expected: ${3}. Actual: ${2}."
+              exit 1
+            fi
+          }
+          test_equal "Wrong \"installed\" output from setup-enry-1" \
+            "${{ steps.setup-enry-1.outputs.installed }}" \
+            "true"
+          test_equal "Wrong \"installed\" output from setup-enry-2" \
+            "${{ steps.setup-enry-2.outputs.installed }}" \
+            "${{ matrix.force }}"
