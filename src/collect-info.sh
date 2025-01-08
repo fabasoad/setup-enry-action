@@ -9,6 +9,9 @@ LIB_DIR_PATH="${SRC_DIR_PATH}/lib"
 main() {
   input_force="${1}"
 
+  curl_installed=$(if command -v curl >/dev/null 2>&1; then echo true; else echo false; fi)
+  echo "curl-installed=${curl_installed}" >> "$GITHUB_OUTPUT"
+
   go_installed=$(if command -v go >/dev/null 2>&1; then echo true; else echo false; fi)
   echo "go-installed=${go_installed}" >> "$GITHUB_OUTPUT"
 
