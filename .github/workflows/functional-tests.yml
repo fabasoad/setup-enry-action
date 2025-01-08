@@ -54,7 +54,8 @@ jobs:
         os: ["ubuntu", "macos", "windows"]
         version: ${{ fromJSON(needs.get-versions.outputs.versions) }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout ${{ github.repository }}
+        uses: actions/checkout@v4
       - name: Setup Enry
         id: setup-enry
         uses: ./

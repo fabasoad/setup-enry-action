@@ -25,6 +25,14 @@ repos:
     rev: v8.22.1
     hooks:
       - id: gitleaks
+  - repo: https://github.com/fabasoad/pre-commit-grype
+    rev: v0.6.1
+    hooks:
+      - id: grype-dir
+        args:
+          - --grype-args=--by-cve --fail-on=low
+          - --hook-args=--log-level debug
+        stages: ["pre-push"]
   # Markdown
   - repo: https://github.com/igorshubovych/markdownlint-cli
     rev: v0.43.0
@@ -55,6 +63,10 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
     hooks:
+      - id: check-executables-have-shebangs
+        stages: ["pre-commit"]
+      - id: check-shebang-scripts-are-executable
+        stages: ["pre-commit"]
       - id: check-merge-conflict
       - id: check-json
         stages: ["pre-push"]
