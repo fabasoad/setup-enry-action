@@ -79,7 +79,7 @@ runs:
       env:
         INPUT_VERSION: "${{ inputs.version }}"
       run: |
-        go build -ldflags="-X main.commit=${{ steps.download-enry.outputs.commit }} -X main.version=${{ steps.download-enry.outputs.ref }}"
+        go build -ldflags="-X main.commit=$(git rev-parse HEAD) -X main.version=${{ steps.download-enry.outputs.ref }}"
         echo "$(pwd)" >> "$GITHUB_PATH"
       shell: sh
       working-directory: ${{ steps.info.outputs.bin-path }}
