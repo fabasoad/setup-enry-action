@@ -10,6 +10,7 @@ main() {
     if [ "${os}" = "alpine" ]; then
       apk --no-cache add curl
     else
+      apt update
       apt install -y curl
     fi
   fi

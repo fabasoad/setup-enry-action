@@ -58,6 +58,7 @@ runs:
 
     - name: Download enry
       if: ${{ steps.info.outputs.bin-installed == 'false' }}
+      id: download-enry
       uses: actions/checkout@v4
       with:
         repository: "go-enry/enry"
@@ -78,12 +79,7 @@ runs:
       env:
         INPUT_VERSION: "${{ inputs.version }}"
       run: |
-        if [ "${INPUT_VERSION}" = "latest" ]; then
-          version="${{ steps.latest-release.outputs.version }}"
-        else
-          version="${INPUT_VERSION}"
-        fi
-        go build -ldflags="-X main.commit=$(git rev-parse HEAD) -X main.version=v${version}"
+        go build -ldflags="-X main.commit=${{ steps.download-enry.outputs.commit }} -X main.version=${{ steps.download-enry.outputs.ref }}"
         echo "$(pwd)" >> "$GITHUB_PATH"
       shell: sh
       working-directory: ${{ steps.info.outputs.bin-path }}

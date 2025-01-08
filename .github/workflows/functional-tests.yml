@@ -75,8 +75,8 @@ jobs:
           test_equal "enry should be installed" \
             "${{ steps.setup-enry.outputs.installed }}" \
             "true"
-      - name: Print version
-        run: enry --version
+      - name: Print info
+        run: enry
   setup-enry-in-container:
     name: Setup enry in container
     needs: [get-versions]
@@ -89,7 +89,8 @@ jobs:
       matrix:
         image: ["ubuntu"]
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout ${{ github.repository }}
+        uses: actions/checkout@v4
       - name: Setup Enry
         id: setup-enry
         uses: ./
@@ -106,8 +107,8 @@ jobs:
           test_equal "enry should be installed" \
             "${{ steps.setup-enry.outputs.installed }}" \
             "true"
-      - name: Print version
-        run: enry --version
+      - name: Print info
+        run: enry
   test-force:
     name: Test force
     runs-on: ubuntu-latest
