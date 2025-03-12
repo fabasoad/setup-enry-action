@@ -39,7 +39,15 @@ The following tools have to be installed for successful work of this GitHub Acti
     github-token: "${{ github.token }}"
 ```
 
-## Usage
+## Outputs
+
+<!-- prettier-ignore-start -->
+| Name      | Description                       | Example |
+|-----------|-----------------------------------|---------|
+| installed | Whether enry was installed or not | `true`  |
+<!-- prettier-ignore-end -->
+
+## Example usage
 
 ```yaml
 name: Setup Enry
@@ -54,32 +62,46 @@ jobs:
       - uses: actions/checkout@v4
       - uses: fabasoad/setup-enry-action@v0
       - name: Run CLI
-        run: enry
+        run: |
+          echo "Text format:"
+          enry
+          echo "JSON format:"
+          enry --json | jq
 ```
 
 ### Result
 
 ```shell
-Run enry
-59.57%  HTML
-21.29%  JavaScript
-14.25%  TypeScript
-4.89%   CSS
-```
-
-### Useful examples
-
-#### Convert to json
-
-```shell
-# Simple output
-enry
-59.57%  HTML
-21.29%  JavaScript
-14.25%  TypeScript
-4.89%   CSS
-
-# Convert to JSON
-echo "{$(enry | sed 's/^\(.*\)\t\(.*\)$/\"\2\":\"\1\"/' | paste -sd "," -)}"
-{"HTML":"59.57%","JavaScript":"21.29%","TypeScript":"14.25%","CSS":"4.89%"}
+Text format:
+79.74% HTML
+9.90% TypeScript
+6.44% JavaScript
+3.93% CSS
+JSON format:
+[
+  {
+    "color": "#e34c26",
+    "language": "HTML",
+    "percentage": "79.74%",
+    "type": "unknown"
+  },
+  {
+    "color": "#3178c6",
+    "language": "TypeScript",
+    "percentage": "9.90%",
+    "type": "unknown"
+  },
+  {
+    "color": "#f1e05a",
+    "language": "JavaScript",
+    "percentage": "6.44%",
+    "type": "unknown"
+  },
+  {
+    "color": "#563d7c",
+    "language": "CSS",
+    "percentage": "3.93%",
+    "type": "unknown"
+  }
+]
 ```
