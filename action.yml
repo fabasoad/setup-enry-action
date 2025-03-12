@@ -86,9 +86,16 @@ runs:
         INPUT_VERSION: "${{ inputs.version }}"
       run: |
         go build -ldflags="-X main.commit=$(git rev-parse HEAD) -X main.version=${{ steps.download-enry.outputs.ref }}"
-        echo "$(pwd)" >> "$GITHUB_PATH"
+        target_dir="${RUNNER_TEMP}/bin"
+        mkdir -p "${target_dir}"
+        mv enry "${target_dir}"
+        echo "${target_dir}" >> "$GITHUB_PATH"
       shell: sh
       working-directory: ${{ steps.info.outputs.bin-path }}
+
+    - name: Clean up
+      run: rm -rf "${{ steps.info.outputs.bin-path }}"
+      shell: sh
 
     - name: Print version
       run: enry --version
