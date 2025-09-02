@@ -58,7 +58,7 @@ jobs:
             version: "1.1.0"
     steps:
       - name: Checkout ${{ github.repository }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Setup Enry
         id: setup-enry
         uses: ./
@@ -90,7 +90,7 @@ jobs:
         image: ["ubuntu"]
     steps:
       - name: Checkout ${{ github.repository }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Setup Enry
         id: setup-enry
         uses: ./
@@ -119,7 +119,7 @@ jobs:
         force: ["true", "false"]
     steps:
       - name: Checkout ${{ github.repository }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Setup enry 1
         id: setup-enry-1
         uses: ./
