@@ -59,7 +59,7 @@ jobs:
     name: Example
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: fabasoad/setup-enry-action@v0
       - name: Run CLI
         run: |
@@ -105,3 +105,7 @@ JSON format:
   }
 ]
 ```
+
+## Contributions
+
+![Alt](https://repobeats.axiom.co/api/embed/07ec3a28afc5fdf6240386ba4678dc78ba840a6d.svg "Repobeats analytics image")
