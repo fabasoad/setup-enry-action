@@ -65,7 +65,7 @@ runs:
     - name: Download enry
       if: ${{ steps.info.outputs.bin-installed == 'false' }}
       id: download-enry
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         repository: "go-enry/enry"
         ref: ${{ format('v{0}', inputs.version == 'latest' && steps.latest-release.outputs.version || inputs.version) }}
@@ -74,7 +74,7 @@ runs:
 
     - name: Setup Go
       if: ${{ steps.info.outputs.bin-installed == 'false' && steps.info.outputs.go-installed == 'false' }}
-      uses: actions/setup-go@v5
+      uses: actions/setup-go@v6
       with:
         go-version-file: "${{ steps.info.outputs.bin-path }}/go.mod"
         cache-dependency-path: "${{ steps.info.outputs.bin-path }}"
