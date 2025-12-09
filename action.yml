@@ -65,7 +65,7 @@ runs:
     - name: Download enry
       if: ${{ steps.info.outputs.bin-installed == 'false' }}
       id: download-enry
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       with:
         repository: "go-enry/enry"
         ref: ${{ format('v{0}', inputs.version == 'latest' && steps.latest-release.outputs.version || inputs.version) }}
