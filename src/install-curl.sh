@@ -8,7 +8,7 @@ main() {
   else
     os=$(grep "^ID=" "/etc/os-release" | cut -d '=' -f 2)
     if [ "${os}" = "alpine" ]; then
-      apk --no-cache add curl
+      apk --no-cache --update add curl
     else
       apt update
       apt install -y curl
