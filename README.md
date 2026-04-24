@@ -20,8 +20,7 @@ This action sets up an [enry](https://github.com/go-enry/enry) tool.
 
 ## Prerequisites
 
-The following tools have to be installed for successful work of this GitHub Action:
-[curl](https://curl.se).
+None.
 
 ## Inputs
 
