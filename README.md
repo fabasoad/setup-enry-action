@@ -58,7 +58,7 @@ jobs:
     name: Example
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: fabasoad/setup-enry-action@v0
       - name: Run CLI
         run: |
