@@ -20,8 +20,7 @@ This action sets up an [enry](https://github.com/go-enry/enry) tool.
 
 ## Prerequisites
 
-The following tools have to be installed for successful work of this GitHub Action:
-[curl](https://curl.se).
+None.
 
 ## Inputs
 
@@ -59,7 +58,7 @@ jobs:
     name: Example
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: fabasoad/setup-enry-action@v0
       - name: Run CLI
         run: |
