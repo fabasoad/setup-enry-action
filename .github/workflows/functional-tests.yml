@@ -27,12 +27,13 @@ jobs:
     name: Get 3 latest versions
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    permissions: {}
     outputs:
       versions: ${{ steps.prepare-list.outputs.versions }}
     steps:
       - name: Get releases
         id: github-releases
-        uses: yakubique/github-releases@v1.2
+        uses: yakubique/github-releases@2827d6f627dc289b8cbbc9b4d030956d67c37c68 # v1.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -42,8 +43,9 @@ jobs:
         id: prepare-list
         env:
           RELEASES_AMOUNT: "3"
+          RELEASES: "${{ steps.github-releases.outputs.releases }}"
         run: |
-          versions=$(echo '${{ steps.github-releases.outputs.releases }}' \
+          versions=$(echo "${RELEASES}" \
             | jq -c -r --arg n "${RELEASES_AMOUNT}" '.[0:($n | tonumber)] | map(sub("^v"; "")) | . += ["latest"]')
           echo "versions=${versions}" >> "$GITHUB_OUTPUT"
   setup-enry:
@@ -51,6 +53,8 @@ jobs:
     needs: [get-versions]
     runs-on: ${{ matrix.os }}-latest
     timeout-minutes: 5
+    permissions:
+      contents: read
     strategy:
       fail-fast: false
       matrix:
@@ -61,7 +65,7 @@ jobs:
             version: "1.1.0"
     steps:
       - name: Checkout ${{ github.repository }}
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           persist-credentials: "false"
       - name: Setup Enry
@@ -70,6 +74,8 @@ jobs:
         with:
           version: ${{ matrix.version }}
       - name: Test action completion
+        env:
+          SETUP_ENRY_OUTPUT_INSTALLED: "${{ steps.setup-enry.outputs.installed }}"
         run: |
           test_equal() {
             if [ "${2}" != "${3}" ]; then
@@ -78,7 +84,7 @@ jobs:
             fi
           }
           test_equal "enry should be installed" \
-            "${{ steps.setup-enry.outputs.installed }}" \
+            "${SETUP_ENRY_OUTPUT_INSTALLED}" \
             "true"
       - name: Print info
         run: enry
@@ -87,6 +93,8 @@ jobs:
     needs: [get-versions]
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    permissions:
+      contents: read
     container:
       image: ${{ matrix.image }}:latest
     strategy:
@@ -95,13 +103,15 @@ jobs:
         image: ["ubuntu"]
     steps:
       - name: Checkout ${{ github.repository }}
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           persist-credentials: "false"
       - name: Setup Enry
         id: setup-enry
         uses: ./
       - name: Test action completion
+        env:
+          SETUP_ENRY_OUTPUT_INSTALLED: "${{ steps.setup-enry.outputs.installed }}"
         run: |
           test_equal() {
             if [ "${2}" != "${3}" ]; then
@@ -110,7 +120,7 @@ jobs:
             fi
           }
           test_equal "enry should be installed" \
-            "${{ steps.setup-enry.outputs.installed }}" \
+            "${SETUP_ENRY_OUTPUT_INSTALLED}" \
             "true"
       - name: Print info
         run: enry
@@ -118,13 +128,15 @@ jobs:
     name: Test force
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    permissions:
+      contents: read
     strategy:
       fail-fast: false
       matrix:
         force: ["true", "false"]
     steps:
       - name: Checkout ${{ github.repository }}
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           persist-credentials: "false"
       - name: Setup enry 1
@@ -136,6 +148,9 @@ jobs:
         with:
           force: ${{ matrix.force }}
       - name: Test action completion
+        env:
+          SETUP_ENRY_1_OUTPUT_INSTALLED: "${{ steps.setup-enry-1.outputs.installed }}"
+          SETUP_ENRY_2_OUTPUT_INSTALLED: "${{ steps.setup-enry-2.outputs.installed }}"
         run: |
           test_equal() {
             if [ "${2}" != "${3}" ]; then
@@ -144,8 +159,8 @@ jobs:
             fi
           }
           test_equal "Wrong \"installed\" output from setup-enry-1" \
-            "${{ steps.setup-enry-1.outputs.installed }}" \
+            "${SETUP_ENRY_1_OUTPUT_INSTALLED}" \
             "true"
           test_equal "Wrong \"installed\" output from setup-enry-2" \
-            "${{ steps.setup-enry-2.outputs.installed }}" \
+            "${SETUP_ENRY_2_OUTPUT_INSTALLED}" \
             "${{ matrix.force }}"
