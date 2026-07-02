@@ -51,7 +51,7 @@ runs:
 
     - name: Setup jq
       if: ${{ steps.info.outputs.bin-installed == 'false' }}
-      uses: dcarbone/install-jq-action@v3
+      uses: dcarbone/install-jq-action@4fcb5062d7ce9bc4382d1a352d19ba3ba2c317c1 # v4.0.1
 
     - name: Get latest release
       if: ${{ steps.info.outputs.bin-installed == 'false' && inputs.version == 'latest' }}
@@ -65,12 +65,13 @@ runs:
     - name: Download enry
       if: ${{ steps.info.outputs.bin-installed == 'false' }}
       id: download-enry
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
       with:
         repository: "go-enry/enry"
-        ref: ${{ format('v{0}', inputs.version == 'latest' && steps.latest-release.outputs.version || inputs.version) }}
+        ref: "${{ format('v{0}', case(inputs.version == 'latest', steps.latest-release.outputs.version, inputs.version)) }}"
         fetch-depth: 1
-        path: ${{ steps.info.outputs.bin-dir }}
+        path: "${{ steps.info.outputs.bin-dir }}"
+        persist-credentials: "false"
 
     - name: Setup Go
       if: ${{ steps.info.outputs.bin-installed == 'false' && steps.info.outputs.go-installed == 'false' }}
@@ -84,8 +85,9 @@ runs:
       id: install-enry
       env:
         INPUT_VERSION: "${{ inputs.version }}"
+        DOWNLOAD_ENRY_OUTPUT_REF: "${{ steps.download-enry.outputs.ref }}"
       run: |
-        go build -ldflags="-X main.commit=$(git rev-parse HEAD) -X main.version=${{ steps.download-enry.outputs.ref }}"
+        go build -ldflags="-X main.commit=$(git rev-parse HEAD) -X main.version=${DOWNLOAD_ENRY_OUTPUT_REF}"
         target_dir="${RUNNER_TEMP}/bin"
         mkdir -p "${target_dir}"
         mv enry "${target_dir}"
@@ -94,7 +96,9 @@ runs:
       working-directory: ${{ steps.info.outputs.bin-path }}
 
     - name: Clean up
-      run: rm -rf "${{ steps.info.outputs.bin-path }}"
+      env:
+        BIN_PATH: "${{ steps.info.outputs.bin-path }}"
+      run: rm -rf "${BIN_PATH}"
       shell: sh
 
     - name: Print version
